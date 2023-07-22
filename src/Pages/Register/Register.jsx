@@ -1,12 +1,17 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import axios from "axios";
+import { AuthContext } from "../../Provider/AuthProvider";
+import { saveUser } from "../../api/auth";
 
 const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
 const Register = () => {
+  const { createUser, updateUser, googleLoginUser, githubLoginUser } =
+    useContext(AuthContext);
+
   const {
     handleSubmit,
     register,
@@ -17,14 +22,38 @@ const Register = () => {
   const password = useRef({});
   password.current = watch("password", "");
 
-  const imageUrl = `https://api.imgbb.com/1/upload?key=${imageToken}`
+  const imageUrl = `https://api.imgbb.com/1/upload?key=${imageToken}`;
 
   const onSubmit = (data) => {
     const formData = new FormData();
     formData.append("image", data.image[0]);
 
-    
-    console.log(data); 
+    axios.post(imageUrl, formData).then((dataImage) => {
+      createUser(data.email, data.password).then((result) => {
+        updateUser(data.name, dataImage.data.data.display_url).then(() => {
+          saveUser(result.user, dataImage.data.data.display_url);
+          console.log("done");
+        });
+      });
+    });
+
+    console.log(data);
+  };
+
+  const handleGoogleUser = () => {
+    googleLoginUser().then((result) => {
+      saveUser(result.user, result.user.photoURL);
+      console.log(result.user);
+    });
+  };
+
+  
+
+  const handleGithubUser = () => {
+    githubLoginUser().then((result) => {
+      saveUser(result.user, result.user.photoURL);
+      console.log(result.user);
+    });
   };
 
   return (
@@ -40,7 +69,6 @@ const Register = () => {
       <div className="mx-20 mt-8 p-6 border border-gray-300 rounded">
         <h2 className="text-2xl font-bold mb-4">Register</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-
           <div className="mb-4">
             <label htmlFor="name" className="block mb-1">
               Name
@@ -55,7 +83,6 @@ const Register = () => {
               <p className="text-red-500">{errors.name.message}</p>
             )}
           </div>
-
 
           <div className="mb-4">
             <label htmlFor="email" className="block mb-1">
@@ -77,7 +104,6 @@ const Register = () => {
               <p className="text-red-500">{errors.email.message}</p>
             )}
           </div>
-
 
           <div className="mb-4">
             <label htmlFor="password" className="block mb-1">
@@ -102,7 +128,6 @@ const Register = () => {
             )}
           </div>
 
-
           <div className="mb-4">
             <label htmlFor="confirmPassword" className="block mb-1">
               Confirm Password
@@ -124,7 +149,6 @@ const Register = () => {
               <p className="text-red-500">{errors.confirmPassword.message}</p>
             )}
           </div>
-
 
           <div className="mb-4">
             <label htmlFor="image" className="block mb-1">
@@ -158,31 +182,26 @@ const Register = () => {
             >
               Register
             </button>
-
-            <div className="mt-4">
-              <button className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400">
-                Reset Password
-              </button>
-            </div>
           </div>
         </form>
 
-
         <div className="mt-4 flex gap-3">
-          <button className="border flex gap-3 items-center py-2 px-4 rounded mr-2">
+          <button
+            onClick={handleGoogleUser}
+            className="border flex gap-3 items-center py-2 px-4 rounded mr-2"
+          >
             <FcGoogle /> Sign Up with Google
           </button>
-          <button className="bg-black flex gap-3 items-center text-white py-2 px-4 rounded hover:bg-gray-800">
+          <button
+            onClick={handleGithubUser}
+            className="bg-black flex gap-3 items-center text-white py-2 px-4 rounded hover:bg-gray-800"
+          >
             <FaGithub /> Sign Up with GitHub
           </button>
         </div>
 
-
         <div className="mt-4">
-          <a
-            href="/login" 
-            className="text-blue-500 hover:underline"
-          >
+          <a href="/login" className="text-blue-500 hover:underline">
             Already have an account? Login here
           </a>
         </div>

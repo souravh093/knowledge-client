@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
-import CollegeItem from "./CollegeItem/CollegeItem";
+import CollegeItem from "../Home/Colleges/CollegeItem/CollegeItem";
+import Container from "../../components/Container/Container";
+import Title from "../../components/Title";
 
 const Colleges = () => {
   const { data: colleges = [], isLoading } = useQuery({
     queryKey: ["colleges"],
     queryFn: async () => {
-      const res = await axios("http://localhost:5000/collegeshome");
+      const res = await axios("http://localhost:5000/colleges");
       return res.data;
     },
   });
@@ -27,14 +29,18 @@ const Colleges = () => {
     );
   }
 
-
   return (
-    <div className="grid grid-cols-3 gap-5">
-        {
-            colleges.map(collage => <CollegeItem key={collage._id} data={collage} />)
-        }
+    <div className="mt-10">
+      <Container>
+        <Title title={"All Colleges"} />
+        <div className="grid grid-cols-3 gap-5">
+          {colleges.map((college) => (
+            <CollegeItem data={college} key={college._id} />
+          ))}
+        </div>
+      </Container>
     </div>
-  )
+  );
 };
 
 export default Colleges;

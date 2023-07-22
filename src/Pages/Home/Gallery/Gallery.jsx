@@ -1,4 +1,5 @@
 import React from "react";
+import Title from "../../../components/Title";
 
 const Gallery = () => {
   const images = [
@@ -13,15 +14,10 @@ const Gallery = () => {
   ];
   return (
     <div className="mt-20">
-      <h2 className="text-4xl font-semibold border-b-4 inline-block border-[#159A9C] pb-3 text-gray-800 mb-4">
-        College graduates group pictures
-      </h2>
+      <Title title={"College graduates group pictures"} />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image, index) => (
-          <div
-            key={index}
-            className="relative overflow-hidden shadow"
-          >
+          <div key={index} className="relative overflow-hidden shadow">
             <img
               src={image}
               alt={`College Group ${index + 1}`}
@@ -32,10 +28,7 @@ const Gallery = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         {image2.map((image, index) => (
-          <div
-            key={index}
-            className="relative overflow-hidden shadow"
-          >
+          <div key={index} className="relative overflow-hidden shadow">
             <img
               src={image}
               alt={`College Group ${index + 1}`}
