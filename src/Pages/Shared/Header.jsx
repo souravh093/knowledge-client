@@ -9,8 +9,9 @@ const Header = () => {
     <div className="py-2 bg-[#B4BEC9]">
       <Container>
         <nav className="flex items-center justify-between">
-          <Link to="/">
+          <Link to="/" className="flex gap-2 items-center">
             <img className="w-16" src={logo} alt="" />
+            <h2 className="uppercase text-3xl font-bold">knowledge door</h2>
           </Link>
           <div>
             <ul className="flex items-center gap-10">
