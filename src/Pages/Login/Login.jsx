@@ -1,14 +1,18 @@
 import React, { useContext, useRef } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { saveUser } from "../../api/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { googleLoginUser, githubLoginUser, loginUser, resetPassword } =
     useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const emailRef = useRef();
 
@@ -21,6 +25,7 @@ const Login = () => {
   const onSubmit = (data) => {
     loginUser(data.email, data.password).then((result) => {
       console.log(result.user);
+      navigate(from, { replace: true });
     });
     console.log(data);
   };
@@ -28,12 +33,14 @@ const Login = () => {
   const handleGoogleUser = () => {
     googleLoginUser().then((result) => {
       saveUser(result.user, result.user.photoURL);
+      navigate(from, { replace: true });
       console.log(result.user);
     });
   };
 
   const handleGithubUser = () => {
     githubLoginUser().then((result) => {
+      navigate(from, { replace: true });
       console.log(result.user);
     });
   };
@@ -130,12 +137,12 @@ const Login = () => {
 
         {/* Link to Register Page */}
         <div className="mt-4">
-          <a
-            href="/register" // Replace with the link to your register page
+          <Link
+            to="/register" // Replace with the link to your register page
             className="text-blue-500 hover:underline"
           >
             Don't have an account? Register here
-          </a>
+          </Link>
         </div>
       </div>
     </div>
