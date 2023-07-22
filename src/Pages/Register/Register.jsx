@@ -1,89 +1,90 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 import axios from "axios";
 
+const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
 const Register = () => {
   const {
     handleSubmit,
-    control,
+    register,
     formState: { errors },
+    watch,
   } = useForm();
 
+  const password = useRef({});
+  password.current = watch("password", "");
+
+  const imageUrl = `https://api.imgbb.com/1/upload?key=${imageToken}`
+
   const onSubmit = (data) => {
-    console.log(data); // You can handle form submission here
+    const formData = new FormData();
+    formData.append("image", data.image[0]);
+
+    
+    console.log(data); 
   };
 
   return (
     <div className="grid grid-cols-2">
       <div>
-        <img className="h-screen object-cover" src="https://i.ibb.co/7S4Z6m5/people-6027028-1280.jpg" alt="" />
+        <img
+          className="h-[calc(100vh-97px)] object-cover"
+          src="https://i.ibb.co/7S4Z6m5/people-6027028-1280.jpg"
+          alt=""
+        />
       </div>
 
-      <div className="mt-8 p-6 border border-gray-300 rounded">
+      <div className="mx-20 mt-8 p-6 border border-gray-300 rounded">
         <h2 className="text-2xl font-bold mb-4">Register</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Name */}
+
           <div className="mb-4">
             <label htmlFor="name" className="block mb-1">
               Name
             </label>
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: "Name is required" }}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="text"
-                  id="name"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              )}
+            <input
+              {...register("name", { required: "Name is required" })}
+              type="text"
+              id="name"
+              className="w-full p-2 border border-gray-300 rounded"
             />
             {errors.name && (
               <p className="text-red-500">{errors.name.message}</p>
             )}
           </div>
 
-          {/* Email */}
+
           <div className="mb-4">
             <label htmlFor="email" className="block mb-1">
               Email
             </label>
-            <Controller
-              name="email"
-              control={control}
-              rules={{
+            <input
+              {...register("email", {
                 required: "Email is required",
                 pattern: {
                   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                   message: "Invalid email address",
                 },
-              }}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="email"
-                  id="email"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              )}
+              })}
+              type="email"
+              id="email"
+              className="w-full p-2 border border-gray-300 rounded"
             />
             {errors.email && (
               <p className="text-red-500">{errors.email.message}</p>
             )}
           </div>
 
-          {/* Password */}
+
           <div className="mb-4">
             <label htmlFor="password" className="block mb-1">
               Password
             </label>
-            <Controller
-              name="password"
-              control={control}
-              rules={{
+            <input
+              {...register("password", {
                 required: "Password is required",
                 pattern: {
                   value:
@@ -91,125 +92,95 @@ const Register = () => {
                   message:
                     "Password must contain at least 8 characters, one letter, one number, and one special character",
                 },
-              }}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="password"
-                  id="password"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              )}
+              })}
+              type="password"
+              id="password"
+              className="w-full p-2 border border-gray-300 rounded"
             />
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
             )}
           </div>
 
-          {/* Confirm Password */}
+
           <div className="mb-4">
             <label htmlFor="confirmPassword" className="block mb-1">
               Confirm Password
             </label>
-            <Controller
-              name="confirmPassword"
-              control={control}
-              rules={{
+            <input
+              {...register("confirmPassword", {
+                required: "Confirm Password is required",
+              })}
+              type="password"
+              id="confirmPassword"
+              {...register("confirmPassword", {
                 required: "Confirm Password is required",
                 validate: (value) =>
-                  value === control.getValues("password")
-                    ? undefined
-                    : "Passwords do not match",
-              }}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="password"
-                  id="confirmPassword"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              )}
+                  value === password.current || "The passwords do not match",
+              })}
+              className="w-full p-2 border border-gray-300 rounded"
             />
             {errors.confirmPassword && (
               <p className="text-red-500">{errors.confirmPassword.message}</p>
             )}
           </div>
 
-          {/* University */}
+
           <div className="mb-4">
-            <label htmlFor="university" className="block mb-1">
-              University
+            <label htmlFor="image" className="block mb-1">
+              Upload Image
             </label>
-            <Controller
-              name="university"
-              control={control}
-              rules={{ required: "University is required" }}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="text"
-                  id="university"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              )}
+            <input
+              {...register("image", {
+                required: "Image is required",
+                validate: {
+                  fileSize: (file) =>
+                    file[0]?.size < 1048576 ||
+                    "Image size must be less than 1MB",
+                  fileType: (file) =>
+                    /jpeg|png|gif/.test(file[0]?.type) ||
+                    "Unsupported image format (jpeg/png/gif only)",
+                },
+              })}
+              type="file"
+              id="image"
+              className="w-full p-2 border border-gray-300 rounded"
             />
-            {errors.university && (
-              <p className="text-red-500">{errors.university.message}</p>
+            {errors.image && (
+              <p className="text-red-500">{errors.image.message}</p>
             )}
           </div>
 
-          {/* Address */}
-          <div className="mb-4">
-            <label htmlFor="address" className="block mb-1">
-              Address
-            </label>
-            <Controller
-              name="address"
-              control={control}
-              rules={{ required: "Address is required" }}
-              render={({ field }) => (
-                <textarea
-                  {...field}
-                  id="address"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-              )}
-            />
-            {errors.address && (
-              <p className="text-red-500">{errors.address.message}</p>
-            )}
-          </div>
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Register
+            </button>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
-            Register
-          </button>
+            <div className="mt-4">
+              <button className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400">
+                Reset Password
+              </button>
+            </div>
+          </div>
         </form>
 
-        {/* Social Media Signup Buttons */}
-        <div className="mt-4">
-          <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mr-2">
-            Sign Up with Google
+
+        <div className="mt-4 flex gap-3">
+          <button className="border flex gap-3 items-center py-2 px-4 rounded mr-2">
+            <FcGoogle /> Sign Up with Google
           </button>
-          <button className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800">
-            Sign Up with GitHub
+          <button className="bg-black flex gap-3 items-center text-white py-2 px-4 rounded hover:bg-gray-800">
+            <FaGithub /> Sign Up with GitHub
           </button>
         </div>
 
-        {/* Reset Password Button */}
-        <div className="mt-4">
-          <button className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400">
-            Reset Password
-          </button>
-        </div>
 
-        {/* Link to Login Page */}
         <div className="mt-4">
           <a
-            href="/login" // Replace with the link to your login page
+            href="/login" 
             className="text-blue-500 hover:underline"
           >
             Already have an account? Login here
