@@ -1,11 +1,15 @@
-import React from 'react';
+import React from "react";
+import Container from "../../components/Container/Container";
+import Search from "../../components/Search/Search";
 
 const Home = () => {
-    return (
-        <div>
-            Home
-        </div>
-    );
+  return (
+    <div>
+      <Container>
+        <Search />
+      </Container>
+    </div>
+  );
 };
 
 export default Home;

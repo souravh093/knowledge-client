@@ -2,15 +2,16 @@ import React from "react";
 import Container from "../../components/Container/Container";
 import logo from "../../assets/logo.png";
 import MenuItem from "../../components/MenuItem/MenuItem";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <div className="py-2 bg-[#B4BEC9]">
       <Container>
         <nav className="flex items-center justify-between">
-          <div>
+          <Link to="/">
             <img className="w-16" src={logo} alt="" />
-          </div>
+          </Link>
           <div>
             <ul className="flex items-center gap-10">
               <MenuItem name={"Home"} path={"/"} />
