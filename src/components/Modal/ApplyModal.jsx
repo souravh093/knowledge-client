@@ -1,35 +1,40 @@
 import { Dialog, Transition } from "@headlessui/react";
+import axios from "axios";
 import { Fragment } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
-const ApplyModal = ({ closeModal, isOpen, id }) => {
-  //   const handleFeedback = (event) => {
-  //     event.preventDefault();
-  //     const feedback = event.target.feedback.value;
-  //     fetch(`${import.meta.env.VITE_BASE_URL}/classes/${id}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "content-type": "application/json",
-  //       },
-  //       body: JSON.stringify({ feedback }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         if (data.modifiedCount) {
-  //           closeModal();
-  //         }
-  //       });
-  //   };
+const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
+const ApplyModal = ({ closeModal, isOpen, id, email }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
 
+  const imageUrl = `https://api.imgbb.com/1/upload?key=${imageToken}`;
+
   const onSubmit = (data) => {
-    console.log(data);
-    // Perform form submission logic here
+    const formData = new FormData();
+    formData.append("image", data.image[0]);
+
+
+    axios.post(imageUrl, formData).then((dataImage) => {
+      console.log(dataImage)
+      axios
+        .post("http://localhost:5000/apply", {
+          ...data,
+          email,
+          collegeId: id,
+          profileImg: dataImage?.data?.data?.display_url,
+        })
+        .then((response) => {
+          console.log(response.status);
+          toast.success("Successfully Apply")
+          closeModal()
+        });
+    });
   };
 
   return (
@@ -193,7 +198,7 @@ const ApplyModal = ({ closeModal, isOpen, id }) => {
                           {...register("address", {
                             required: "Address is required",
                           })}
-                          className="input-field px-3 py-2 border block w-full" 
+                          className="input-field px-3 py-2 border block w-full"
                         />
                         {errors.address && (
                           <span className="text-red-500">

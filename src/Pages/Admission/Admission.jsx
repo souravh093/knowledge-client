@@ -1,12 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Title from "../../components/Title";
 import ApplyModal from "../../components/Modal/ApplyModal";
+import { AuthContext } from "../../Provider/AuthProvider";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Admission = () => {
+  const { user } = useContext(AuthContext);
   const [applyModal, setApplyModal] = useState(false);
   const [id, setId] = useState("");
+  const navigate = useNavigate();
 
   const closeApplyModal = () => {
     setApplyModal(false);
@@ -80,6 +85,19 @@ const Admission = () => {
                     onClick={() => {
                       setApplyModal(true);
                       setId(college?._id);
+                      !user &&
+                        Swal.fire({
+                          title: "Please login first",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#159A9C",
+                          cancelButtonColor: "#d33",
+                          confirmButtonText: "Login",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            navigate("/login");
+                          }
+                        });
                     }}
                     className="bg-[#159A9C] text-white px-4 py-2 rounded-md shadow-md hover:bg-[#158d8f] focus:outline-none"
                   >
@@ -92,7 +110,9 @@ const Admission = () => {
         </table>
       </div>
 
-      <ApplyModal isOpen={applyModal} id={id} closeModal={closeApplyModal} />
+      {user && (
+        <ApplyModal isOpen={applyModal} email={user?.email} id={id} closeModal={closeApplyModal} />
+      )}
     </div>
   );
 };
