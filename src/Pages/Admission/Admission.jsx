@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const Admission = () => {
   const { user } = useContext(AuthContext);
   const [applyModal, setApplyModal] = useState(false);
-  const [id, setId] = useState("");
+  const [collegeData, setCollegeData] = useState({});
   const navigate = useNavigate();
 
   const closeApplyModal = () => {
@@ -84,7 +84,7 @@ const Admission = () => {
                   <button
                     onClick={() => {
                       setApplyModal(true);
-                      setId(college?._id);
+                      setCollegeData(college)
                       !user &&
                         Swal.fire({
                           title: "Please login first",
@@ -111,7 +111,7 @@ const Admission = () => {
       </div>
 
       {user && (
-        <ApplyModal isOpen={applyModal} email={user?.email} id={id} closeModal={closeApplyModal} />
+        <ApplyModal isOpen={applyModal} email={user?.email} collegeData={collegeData} closeModal={closeApplyModal} />
       )}
     </div>
   );

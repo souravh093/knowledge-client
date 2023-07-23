@@ -4,6 +4,7 @@ import React from "react";
 import CollegeItem from "./CollegeItem/CollegeItem";
 
 const Colleges = () => {
+  
   const { data: colleges = [], isLoading } = useQuery({
     queryKey: ["colleges"],
     queryFn: async () => {

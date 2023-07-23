@@ -1,12 +1,14 @@
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
-const ApplyModal = ({ closeModal, isOpen, id, email }) => {
+const ApplyModal = ({ closeModal, isOpen, collegeData, email }) => {
+  console.log(collegeData)
   const {
     handleSubmit,
     register,
@@ -19,20 +21,18 @@ const ApplyModal = ({ closeModal, isOpen, id, email }) => {
     const formData = new FormData();
     formData.append("image", data.image[0]);
 
-
     axios.post(imageUrl, formData).then((dataImage) => {
-      console.log(dataImage)
       axios
         .post("http://localhost:5000/apply", {
           ...data,
+          ...collegeData,
           email,
-          collegeId: id,
           profileImg: dataImage?.data?.data?.display_url,
         })
         .then((response) => {
           console.log(response.status);
-          toast.success("Successfully Apply")
-          closeModal()
+          toast.success("Successfully Apply");
+          closeModal();
         });
     });
   };

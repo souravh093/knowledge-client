@@ -141,7 +141,7 @@ const Login = () => {
             to="/register" // Replace with the link to your register page
             className="text-blue-500 hover:underline"
           >
-            Don't have an account? Register here
+            Don not have an account? Register here
           </Link>
         </div>
       </div>
