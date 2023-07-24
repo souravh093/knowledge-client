@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
 const ApplyModal = ({ closeModal, isOpen, collegeData, email }) => {
-  console.log(collegeData)
+  console.log(collegeData);
   const {
     handleSubmit,
     register,
