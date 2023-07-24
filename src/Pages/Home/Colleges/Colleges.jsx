@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CollegeItem from "./CollegeItem/CollegeItem";
+import { FaSearch } from "react-icons/fa";
 
 const Colleges = () => {
-  
+  const [searchKey, setSearchKey] = useState("");
+  console.log(searchKey)
   const { data: colleges = [], isLoading } = useQuery({
     queryKey: ["colleges"],
     queryFn: async () => {
@@ -12,6 +14,13 @@ const Colleges = () => {
       return res.data;
     },
   });
+  
+  const [college, setCollege] = useState([]);
+
+
+  useEffect(() => {
+    setCollege(colleges);
+  }, [colleges]);
 
   if (isLoading) {
     return (
@@ -28,14 +37,36 @@ const Colleges = () => {
     );
   }
 
+  const handleSearch = () => {
+    fetch(`http://localhost:5000/searchCollege/${searchKey}`)
+      .then((res) => res.json())
+      .then((data) => setCollege(data));
+  };
 
   return (
-    <div className="grid grid-cols-3 gap-5">
-        {
-            colleges.map(collage => <CollegeItem key={collage._id} data={collage} />)
-        }
+    <div>
+      <form className="flex items-center justify-center my-10">
+        <input
+          onChange={(e) => setSearchKey(e.target.value)}
+          type="search"
+          className="border border-[#159A9C] px-5 py-3  outline-none text-2xl w-1/3"
+          placeholder="search collage"
+        />
+        <button
+          onClick={handleSearch}
+          type="submit"
+          className="px-5 bg-[#159A9C] py-4 border hover:text-[##B4BEC9] border-[#159A9C]"
+        >
+          <FaSearch className="text-2xl text-white" />
+        </button>
+      </form>
+      <div className="grid grid-cols-3 gap-5">
+        {college.map((collage) => (
+          <CollegeItem key={collage._id} data={collage} />
+        ))}
+      </div>
     </div>
-  )
+  );
 };
 
 export default Colleges;
