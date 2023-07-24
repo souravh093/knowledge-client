@@ -5,12 +5,17 @@ import { FaGithub } from "react-icons/fa";
 import axios from "axios";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { saveUser } from "../../api/auth";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
 const Register = () => {
   const { createUser, updateUser, googleLoginUser, githubLoginUser } =
     useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const {
     handleSubmit,
@@ -32,6 +37,7 @@ const Register = () => {
       createUser(data.email, data.password).then((result) => {
         updateUser(data.name, dataImage.data.data.display_url).then(() => {
           saveUser(result.user, dataImage.data.data.display_url);
+          navigate(from, { replace: true });
           console.log("done");
         });
       });
@@ -43,22 +49,22 @@ const Register = () => {
   const handleGoogleUser = () => {
     googleLoginUser().then((result) => {
       saveUser(result.user, result.user.photoURL);
+      navigate(from, { replace: true });
       console.log(result.user);
     });
   };
 
-  
-
   const handleGithubUser = () => {
     githubLoginUser().then((result) => {
       saveUser(result.user, result.user.photoURL);
+      navigate(from, { replace: true });
       console.log(result.user);
     });
   };
 
   return (
-    <div className="grid grid-cols-2">
-      <div>
+    <div className="grid lg:grid-cols-2">
+      <div className="hidden lg:block">
         <img
           className="h-[calc(100vh-97px)] object-cover"
           src="https://i.ibb.co/7S4Z6m5/people-6027028-1280.jpg"
@@ -185,7 +191,7 @@ const Register = () => {
           </div>
         </form>
 
-        <div className="mt-4 flex gap-3">
+        <div className="mt-4 flex flex-col lg:flex-row gap-3">
           <button
             onClick={handleGoogleUser}
             className="border flex gap-3 items-center py-2 px-4 rounded mr-2"

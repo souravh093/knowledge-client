@@ -8,6 +8,6 @@ export const saveUser = (user, url) => {
   };
 
   axios
-    .put(`http://localhost:5000/users/${user?.email}`, currentUser)
+    .put(`https://knowledge-door-server.vercel.app/users/${user?.email}`, currentUser)
     .then((data) => console.log(data));
 };

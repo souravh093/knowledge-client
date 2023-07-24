@@ -11,7 +11,7 @@ const MyCollege = () => {
   const { data: applliedinfo = [], isLoading } = useQuery({
     queryKey: ["colleges"],
     queryFn: async () => {
-      const res = await axios(`http://localhost:5000/applied/${user?.email}`);
+      const res = await axios(`https://knowledge-door-server.vercel.app/applied/${user?.email}`);
       return res.data;
     },
   });

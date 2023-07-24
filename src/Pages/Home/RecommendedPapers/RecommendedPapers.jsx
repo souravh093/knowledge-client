@@ -9,7 +9,7 @@ const RecommendedPapers = () => {
   const { data: papers = [], isLoading } = useQuery({
     queryKey: ["research"],
     queryFn: async () => {
-      const res = await axios("http://localhost:5000/research");
+      const res = await axios("https://knowledge-door-server.vercel.app/research");
       return res.data;
     },
   });

@@ -20,7 +20,7 @@ const Admission = () => {
   const { data: colleges = [], isLoading } = useQuery({
     queryKey: ["college"],
     queryFn: async () => {
-      const res = await axios("http://localhost:5000/colleges");
+      const res = await axios("https://knowledge-door-server.vercel.app/colleges");
       return res.data;
     },
   });

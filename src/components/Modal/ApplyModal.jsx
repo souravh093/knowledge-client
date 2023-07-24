@@ -22,7 +22,7 @@ const ApplyModal = ({ closeModal, isOpen, collegeData, email }) => {
 
     axios.post(imageUrl, formData).then((dataImage) => {
       axios
-        .post("http://localhost:5000/apply", {
+        .post("https://knowledge-door-server.vercel.app/apply", {
           ...data,
           ...collegeData,
           email,

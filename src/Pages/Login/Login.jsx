@@ -53,8 +53,8 @@ const Login = () => {
   };
 
   return (
-    <div className="grid grid-cols-2">
-      <div>
+    <div className="grid lg:grid-cols-2">
+      <div className="hidden lg:block">
         <img
           className="h-[calc(100vh-97px)] object-cover"
           src="https://i.ibb.co/7S4Z6m5/people-6027028-1280.jpg"
@@ -110,7 +110,7 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-4 flex gap-3">
+        <div className="mt-4 flex flex-col lg:flex-row gap-3">
           <button
             onClick={handleGoogleUser}
             className="border flex gap-3 items-center py-2 px-4 rounded mr-2"

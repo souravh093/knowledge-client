@@ -1,9 +1,12 @@
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const MyClassItem = ({ data }) => {
+  const { user } = useContext(AuthContext);
   const [rating, setRating] = useState(0);
 
   const [feedback, setFeedback] = useState("");
@@ -22,9 +25,12 @@ const MyClassItem = ({ data }) => {
       ratingCollege: rating,
       review: feedback,
     };
-    axios.post("http://localhost:5000/reviews", reviews).then((response) => {
-      console.log("Response:", response.data);
-    });
+    axios
+      .post("https://knowledge-door-server.vercel.app/reviews", reviews)
+      .then((response) => {
+        console.log("Response:", response.data);
+        toast.success("Successfully send Feedback");
+      });
   };
 
   return (
@@ -117,12 +123,21 @@ const MyClassItem = ({ data }) => {
                 value={feedback}
                 onChange={handleFeedbackChange}
               />
-              <button
-                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                onClick={handleSubmit}
-              >
-                Submit Feedback
-              </button>
+              {user ? (
+                <button
+                  className="bg-blue-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  onClick={handleSubmit}
+                >
+                  Submit Feedback
+                </button>
+              ) : (
+                <button
+                  className="bg-gray-500 text-white font-semibold py-2 px-4 rounded cursor-not-allowed opacity-50"
+                  disabled
+                >
+                  Submit Feedback
+                </button>
+              )}
             </form>
           </div>
         </div>

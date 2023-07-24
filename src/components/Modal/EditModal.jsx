@@ -15,10 +15,12 @@ const EditModal = ({ isOpen, closeModal, editData, email }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    axios.put(`http://localhost:5000/profiles/${email}`, data).then((res) => {
-      toast.success("Successfully updated")
-      closeModal();
-    });
+    axios
+      .put(`https://knowledge-door-server.vercel.app/profiles/${email}`, data)
+      .then((res) => {
+        toast.success("Successfully updated");
+        closeModal();
+      });
     console.log(data); // You can perform any action with the form data here
   };
   return (

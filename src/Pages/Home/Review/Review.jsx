@@ -4,12 +4,18 @@ import React from "react";
 import Container from "../../../components/Container/Container";
 import ReviewItem from "./ReviewItem/ReviewItem";
 import Title from "../../../components/Title";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 const Review = () => {
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
-      const res = await axios("http://localhost:5000/reviews");
+      const res = await axios(
+        "https://knowledge-door-server.vercel.app/reviews"
+      );
       return res.data;
     },
   });
@@ -34,11 +40,26 @@ const Review = () => {
     <div className="mt-20">
       <Title title={"Reviews "} />
       <Container>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          loop
+          spaceBetween={50}
+          slidesPerView={3}
+          pagination={{ clickable: true }}
+          autoplay={{
+            delay: 1000,
+            disableOnInteraction: false,
+          }}
+          onSlideChange={() => console.log("slide change")}
+          onSwiper={(swiper) => console.log(swiper)}
+        >
           {reviews.map((review) => (
-            <ReviewItem key={review._id} review={review} />
+            <SwiperSlide key={review._id}>
+              <ReviewItem review={review} />
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </Container>
     </div>
   );

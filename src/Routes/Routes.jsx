@@ -44,7 +44,7 @@ const router = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/collegeDetails/${params.id}`),
+          fetch(`https://knowledge-door-server.vercel.app/collegeDetails/${params.id}`),
       },
       {
         path: "/admission",
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
         path: "/researches/:id",
         element: <ResearchDetails />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/researches/${params.id}`),
+          fetch(`https://knowledge-door-server.vercel.app/researches/${params.id}`),
       },
     ],
   },
