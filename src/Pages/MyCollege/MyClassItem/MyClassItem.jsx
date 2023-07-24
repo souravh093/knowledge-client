@@ -1,12 +1,10 @@
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+import axios from "axios";
 import React, { useState } from "react";
 
 const MyClassItem = ({ data }) => {
   const [rating, setRating] = useState(0);
-  const handleRatingChange = (newRating) => {
-    setRating(newRating);
-  };
 
   const [feedback, setFeedback] = useState("");
 
@@ -16,12 +14,22 @@ const MyClassItem = ({ data }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Feedback submitted:", feedback);
+    const reviews = {
+      name: data.candidateName,
+      candidateImg: data.profileImg,
+      collegeName: data.college_name,
+      collegeImage: data.college_image,
+      ratingCollege: rating,
+      review: feedback,
+    };
+    axios.post("http://localhost:5000/reviews", reviews).then((response) => {
+      console.log("Response:", response.data);
+    });
   };
+
   return (
     <div className="px-4 py-8 border">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Left Part - College Information */}
         <div className="md:mr-8">
           <img
             src={data.college_image}
@@ -66,7 +74,6 @@ const MyClassItem = ({ data }) => {
           <p className="text-sm">{data.admission_process}</p>
         </div>
 
-        {/* Right Part - Candidate Information */}
         <div>
           <img
             src={data.profileImg}
