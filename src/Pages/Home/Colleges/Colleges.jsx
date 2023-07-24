@@ -6,7 +6,7 @@ import { FaSearch } from "react-icons/fa";
 
 const Colleges = () => {
   const [searchKey, setSearchKey] = useState("");
-  console.log(searchKey)
+  const [college, setCollege] = useState([]);
   const { data: colleges = [], isLoading } = useQuery({
     queryKey: ["colleges"],
     queryFn: async () => {
@@ -15,8 +15,8 @@ const Colleges = () => {
     },
   });
   
-  const [college, setCollege] = useState([]);
 
+  console.log(college)
 
   useEffect(() => {
     setCollege(colleges);
@@ -60,7 +60,7 @@ const Colleges = () => {
           <FaSearch className="text-2xl text-white" />
         </button>
       </form>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         {college.map((collage) => (
           <CollegeItem key={collage._id} data={collage} />
         ))}

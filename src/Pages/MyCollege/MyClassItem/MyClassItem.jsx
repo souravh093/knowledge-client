@@ -93,7 +93,7 @@ const MyClassItem = ({ data }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid lg:grid-cols-2 gap-2">
             <div className="bg-white border rounded-lg shadow-lg p-6">
               <h1 className="text-2xl text-center font-bold mb-4">
                 Rate this College:

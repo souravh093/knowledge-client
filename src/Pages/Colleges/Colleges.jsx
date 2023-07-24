@@ -33,7 +33,7 @@ const Colleges = () => {
     <div className="mt-10">
       <Container>
         <Title title={"All Colleges"} />
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {colleges.map((college) => (
             <CollegeItem data={college} key={college._id} />
           ))}

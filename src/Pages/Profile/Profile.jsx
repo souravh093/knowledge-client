@@ -30,7 +30,7 @@ const Profile = () => {
             <div className="md:flex-shrink-0">
               <img
                 className="h-full w-full object-cover md:w-96"
-                src={data.profileImg || user.photoURL}
+                src={data.profileImg || user?.photoURL}
                 alt="User"
               />
             </div>
