@@ -30,7 +30,7 @@ const Profile = () => {
             <div className="md:flex-shrink-0">
               <img
                 className="h-full w-full object-cover md:w-96"
-                src={data.profileImg || user?.photoURL}
+                src={data?.profileImg || user?.photoURL}
                 alt="User"
               />
             </div>
@@ -38,22 +38,22 @@ const Profile = () => {
               <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                 Name
               </div>
-              <div className="font-bold text-xl mb-2">{data.candidateName  || user?.displayName}</div>
+              <div className="font-bold text-xl mb-2">{data?.candidateName  || user?.displayName}</div>
 
               <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                 Email
               </div>
-              <div className="text-gray-600 mb-4">{data.candidateEmail || user?.email}</div>
+              <div className="text-gray-600 mb-4">{data?.candidateEmail || user?.email}</div>
 
               <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-                {data.college_name}
+                {data?.college_name}
               </div>
               <div className="text-gray-600 mb-4">
-                {data.address}
+                {data?.address}
               </div>
 
               <div className="tracking-wide text-sm font-semibold">
-                Data of Birth:  {data.dateOfBirth}
+                Data of Birth:  {data?.dateOfBirth}
               </div>
 
               <button
