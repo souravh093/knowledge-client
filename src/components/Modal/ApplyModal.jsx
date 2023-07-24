@@ -1,9 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { AuthContext } from "../../Provider/AuthProvider";
 
 const imageToken = import.meta.env.VITE_UPLOAD_TOKEN;
 
